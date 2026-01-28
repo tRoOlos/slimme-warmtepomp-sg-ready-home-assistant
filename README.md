@@ -1,27 +1,38 @@
 # Slimme warmtepompsturing met SG-Ready en Home Assistant
 
-Deze repository vormt de **technische verdieping** bij het LinkedIn-artikel  
+Deze repository vormt de **verdieping** bij het LinkedIn-artikel  
+*“Slimme warmtepompsturing: besparen, comfort behouden én het net helpen”*.
+
+# Slimme warmtepompsturing met SG-Ready en Home Assistant
+
+Deze repository vormt de **verdieping** bij het LinkedIn-artikel  
 *“Slimme warmtepompsturing: besparen, comfort behouden én het net helpen”*.
 
 Waar het artikel ingaat op het *waarom* en de ontwerpkeuzes, beschrijft deze README
-het *hoe*: de onderliggende principes, randvoorwaarden en een **volledig stap-voor-stap
-implementatie** van slimme warmtepompsturing met:
-
-- **SG-Ready** (gedragssturing van de warmtepomp);
-- **dynamische elektriciteitsprijzen**;
-- **optioneel: PV-overproductie**;
-- **Home Assistant** als coördinatielaag.
-
-Alles wordt ingericht **via de Home Assistant gebruikersinterface**.
+in meer detail:
+1. **hoe het principe werkt**
+2. **wat je nodig hebt om te beginnen**
+3. **een volledig stap-voor-stap implementatie**
 
 ## 1. Hoe werkt dit principe?
 
 Slimme warmtepompsturing draait niet om het continu bijregelen van setpoints of vermogens,
 maar om **het sturen van gedrag op het juiste moment**.
 
-Twee eigenschappen maken dit mogelijk:
+Drie eigenschappen maken dit mogelijk:
 - de **thermische massa** van een woning;
-- de beschikbaarheid van **externe signalen** zoals prijs en lokaal overschot.
+- een **open standaard voor gedragssturing** van de warmtepomp 
+- de beschikbaarheid en het combineren van **data: zoals prijs en lokaal overschot** in gedragsstuursignalen.
+
+## 1. Hoe werkt dit principe?
+
+Slimme warmtepompsturing draait niet om het continu bijregelen van setpoints of vermogens,
+maar om **het sturen van gedrag op het juiste moment**.
+
+Drie eigenschappen maken dit mogelijk:
+- de **thermische massa** van een woning;
+- een **open standaard voor gedragssturing** van de warmtepomp 
+- de beschikbaarheid en het combineren van **data: zoals prijs en lokaal overschot** in gedragsstuursignalen.
 
 ### 1.1 De warmtepomp als flexibel systeemonderdeel
 
@@ -30,7 +41,7 @@ Tegelijkertijd beschikt een woning over natuurlijke thermische opslag:
 vloerverwarming, radiatoren, buffervaten en de gebouwschil zelf.
 
 Daardoor hoeft warmte (of koeling) **niet exact op het moment van gebruik**
-opgewekt te worden. Productie kan in de tijd worden verschoven zonder merkbaar
+opgewekt te worden. Productie van warmte of koude kan in de tijd worden verschoven zonder merkbaar
 comfortverlies.
 
 Dit maakt de warmtepomp bij uitstek geschikt voor flexibiliteit:
@@ -68,28 +79,9 @@ Juist deze scheiding maakt SG-Ready robuust, uitlegbaar en breed toepasbaar.
 
 Sommige warmtepompleveranciers bieden ook eigen functionaliteit om warmtepompen aan te sturen op basis van dynamische prijzen. Zo heeft mijn Nibe-warmtepomp de functie Smart Price Adaption (SPA). Als je een snelle basisoplossing zoekt, kan dat prima werken. In de praktijk bleek SPA voor mij echter te beperkt, te traag en te weinig configureerbaar. SG-Ready biedt daarentegen maximale controle, flexibiliteit en betrouwbaarheid — precies wat je nodig hebt als je dynamische prijzen optimaal wilt benutten én je sturing wilt uitbreiden met bijvoorbeeld PV-overproductie en energieopslag.
 
----
-
-## 2. Wat heb je nodig om te beginnen?
-
-Slimme warmtepompsturing blijkt in de praktijk verrassend laagdrempelig.
-Met een paar eenvoudige checks en beperkte hardware kun je starten.
-
-### 2.1 Warmtepomp met SG-Ready ondersteuning
-
-Controleer of jouw warmtepomp SG-Ready ondersteunt.
-- Veel warmtepompen ondersteunen SG-Ready (grofweg 70–80% van de modellen van de afgelopen tien jaar), maar dit verschilt per fabrikant en type. Controleer daarom altijd de handleiding van jouw warmtepomp.
-- Je kunt ook de officiële <a href="https://www.waermepumpe.de/normen-technik/sg-ready/sg-ready-datenbank/" target="_blank" rel="noopener noreferrer"> SG-Ready-database </a> raadplegen. Deze lijst geeft een goede indicatie, maar is niet volledig. Sommige modellen — zoals mijn eigen Nibe F1145 — staan er bijvoorbeeld niet in, terwijl ze SG-Ready wel degelijk ondersteunen.
-
-Let op:
-- SG-Ready staat niet altijd in de achtergelaten installatiehandleiding;
-- download de meest recente handleiding van de fabrikant;
-- update indien nodig de warmtepompsoftware.
-
 ### 2.2 Home Assistant als coördinatielaag
 
-Om SG-Ready daadwerkelijk slim te benutten, is een regielaag nodig
-die externe signalen kan combineren en vertalen naar gewenst gedrag.
+Om SG-Ready daadwerkelijk slim te benutten, is een regielaag nodig die externe signalen kan combineren en vertalen naar gewenst gedrag.
 
 **Home Assistant (HA)** vervult deze rol:
 - open-source;
@@ -103,34 +95,113 @@ van de warmtepomp, maar als **coördinator** tussen:
 - lokaal overschot;
 - beschikbare SG-Ready gedragsmodi.
 
+Voor deze slimme warmtepompsturing:
+- haalt HA dynamische energieprijzen op en bepaalt prijsniveaus;
+- kijkt HA naar energieverbruik of overproductie (optioneel);
+- beslist HA welke SG-Ready-stand actief moet zijn;
+- stuurt HA via twee eenvoudige schakelmodules de warmtepomp aan.
+
+---
+
+## 2. Wat heb je nodig om te beginnen?
+
+Slimme warmtepompsturing blijkt in de praktijk verrassend laagdrempelig.
+Met een paar eenvoudige checks en beperkte hardware kun je starten.
+
+### 2.1 Warmtepomp met SG-Ready ondersteuning
+
+Controleer of jouw warmtepomp SG-Ready ondersteunt.
+- Veel warmtepompen ondersteunen SG-Ready (grofweg 70–80% van de modellen van de afgelopen tien jaar), maar dit verschilt per fabrikant en type. Controleer daarom altijd de handleiding van jouw warmtepomp.
+- Je kunt ook de officiële [SG-Ready-database](https://www.waermepumpe.de/normen-technik/sg-ready/sg-ready-datenbank/) raadplegen. Deze lijst geeft een goede indicatie, maar is niet volledig. Sommige modellen — zoals mijn eigen Nibe F1145 — staan er bijvoorbeeld niet in, terwijl ze SG-Ready wel degelijk ondersteunen.
+
+Let op:
+- SG-Ready staat niet altijd in de achtergelaten installatiehandleiding;
+- download de meest recente handleiding van de fabrikant;
+- update indien nodig de warmtepompsoftware.
+
+### 2.2 Enige technische vaardigheid en tijd voor eenmalige configuratie
+
+Je hoeft geen programmeur te zijn. Maar je moet wel:
+- De schakelmodules kunnen koppelen aan je warmtepomp
+- Home Assistant kunnen instellen (prijzen/prijsniveaus, schakelmodules, en een automatisering voor de SG-Ready-modi)
+
+Het is geen complexe technologie — vooral logisch werken en een paar instellingen zetten. In het volgende hoofdstuk leg ik uit hoe, en met AI als hulplijn moet het zeker lukken. Daarna werkt het systeem volledig automatisch.
+
+
 ### 2.3 Benodigde hardware
 
-- **Home Assistant Green** (of vergelijkbare HA-installatie);
-- **2× schakelmodules met potentiaalvrij relais**  
-  (bijv. Shelly Plus 1 Gen4);
-- stabiele netwerkverbinding;
-- **optioneel:** P1-lezer of energiemeter voor verbruik & PV-opwek.
+Voor een praktische en betaalbare setup:
+- Home Assistant Green (plug-and-play, ± €100).
+- Twee schakelmodules (potentiaalvrije relais) om de SG-Ready-contacten aan te sturen, bijvoorbeeld: 2× een Shelly Plus 1 Gen4 (± €15 per stuk)
+- Een stabiele wifi-verbinding bij de warmtepomp
+- Optioneel: een Slimme Meter P1-lezer voor HA (± €30) voor inzicht in verbruik en aanvullende sturing op PV-overproductie.
+
 
 ### 2.4 Dynamisch energiecontract
 
-Voor prijssturing is een dynamisch contract nodig
-waarbij uurprijzen beschikbaar zijn.
-
-Deze prijzen worden via een integratie in Home Assistant opgehaald
-(bijv. ENTSO-e, Nordpool of Tibber).
+Voor prijssturing is een dynamisch contract nodig waarbij de prijzen per uur of 15m beschikbaar zijn.
 
 ---
 
-## 3. Hoe realiseer je slimme sturing in de praktijk?
+## 3. Een volledig stap-voor-stap implementatie
 
-Hieronder volgt de **volledige stap-voor-stap implementatie**,
-zoals beschreven in het Word-document.
+Nu duidelijk is waarom slimme sturing zinvol is en wat je daarvoor nodig hebt, volgt nu de detaillering: hoe richt je het daadwerkelijk in? 
 
-Alles wordt ingericht via de **Home Assistant UI**.
+### Stap 1 — Vind de SG-Ready ingangen op jouw warmtepomp en sluit de schakelmodules aan. 
+
+Elke warmtepomp met SG-Ready ondersteuning heeft  **twee ingangen** (meestal aangeduid als **A** en **B**). Deze schakelsignalen bepalen samen de vier gedragsmodi. Afhankelijk van het merk kunnen deze ingangen verschillende namen hebben, zoals: A/B, SG-1 / SG-2, AUX 1 / AUX 2 etc. Check de handleiding waar deze twee ingangen zich bevinden op de warmtepomp. 
+
+De twee ingangen gaan geschakeld worden door de **twee Shelly-schakelmodules**, zet voor de duidelijkheid op een module een A en op de andere module een B.
+
+#### 1.1 Voeden van de schakelmodules (230 V)
+
+De schakelmodules kunnen eenvoudig gevoed worden met een standaard **230 V-aansluitsnoer met stekker**:
+
+- **Bruin → L**
+- **Blauw → N**
+- **Geel/groen (aarde)** → afwerken in een lasklem (niet aansluiten op de schakelmodule)
+
+Met lasklemmen kun je **L en N doorlussen** naar beide schakelmodules, zodat ze gelijktijdig gevoed worden zonder extra installatiewerk.
+
+⚠️ Steek de stekker **pas in het stopcontact** nadat ook de bedrading met de warmtepomp is aangesloten.
+
+#### 1.2 Verbinden van de schakelmodules met de SG-Ready-ingangen
+
+Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit.
+
+Voor de verbinding tussen de schakelmodules en de warmtepomp gebruik je bij voorkeur een stukje **UTP-kabel**.  
+SG-Ready werkt met een **spanningsloos (potentiaalvrij) contact** — de aders van een UTP-kabel zijn hiervoor ideaal.
+
+Belangrijk:
+- de **volgorde van de twee draden maakt niet uit**;
+- de warmtepomp detecteert alleen **open of gesloten**;
+- de **O** en **I**-klemmen op de schakelmodule vormen samen één schakelcontact.
+
+**Voorbeeldbedrading:**
+
+- Blauw + Blauw/Wit  
+  → Schakelmodule **A** (klemmen **O** en **I**)  
+  → SG-Ready ingang **A** op de warmtepomp
+
+- Oranje + Oranje/Wit  
+  → Schakelmodule **B** (klemmen **O** en **I**)  
+  → SG-Ready ingang **B** op de warmtepomp
+
+Wanneer alles is aangesloten:
+1. steek je de stekker in het stopcontact;
+2. zet je de warmtepomp weer onder spanning.
+
+Aansluitschema van twee shelly schakelmodules met de SG-Reeady ingangen op de warmtepomp:
+
+<img width="425" height="227" alt="aansluitschema- schakelcontacten" src="https://github.com/user-attachments/assets/ea38d3be-4aae-4161-b79c-2202e58e79a0" />
 
 ---
 
-### Stap 1 — SG-Ready ingangen aansluiten
+### Resultaat van stap 1
+
+- Beide schakelmodules zijn correct aangesloten  
+- SG-Ready ingang **A** en **B** zijn afzonderlijk aanstuurbaar  
+- De warmtepomp is klaar voor externe gedragssturing
 
 Elke SG-Ready warmtepomp heeft twee ingangen (A en B).
 Deze worden aangesloten op twee schakelmodules met potentiaalvrij contact.
