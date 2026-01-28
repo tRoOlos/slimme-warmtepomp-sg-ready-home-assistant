@@ -181,49 +181,12 @@ Kopieer deze code in het state template veld:
 {% endif %}
 ```
 
-#### Template sensor: Energieprijsniveau (via UI)
-
-Maak een **Template sensor** aan via:
-`Instellingen → Apparaten & diensten → Helpers`
-
-Plak onderstaande code in het **State template** veld
-(en pas indien nodig de prijssensor aan):
-
-```jinja2
-{% set prices = state_attr('sensor.average_electricity_price', 'prices_today') %}
-{% if prices and prices | length > 0 %}
-  {% set price_values = prices | map(attribute='price') | list %}
-  {% set avg = price_values | average %}
-  {% set current = states('sensor.average_electricity_price') | float(0) %}
-  {% if avg > 0 %}
-    {% set ratio = current / avg %}
-    {% if ratio <= 0.6 %}
-      Zeer goedkoop
-    {% elif ratio <= 0.9 %}
-      Goedkoop
-    {% elif ratio < 1.15 %}
-      Normaal
-    {% elif ratio < 1.4 %}
-      Duur
-    {% else %}
-      Zeer duur
-    {% endif %}
-  {% else %}
-    Onbekend
-  {% endif %}
-{% else %}
-  Onbekend
-{% endif %}
-
-
 ### Resultaat van stap 3
 
 - Home Assistant beschikt over **actuele uurprijzen**
 - Er is een sensor die **elk uur automatisch het prijsniveau bepaalt**
-- Deze prijsniveaus vormen de **input voor de SG-Ready-automatisering in stap 4**
-
-
-
+- Deze prijsniveau sensor vormt de **input voor de SG-Ready-automatisering in stap 4**
+___
 
 ## Stap 4 — SG-Ready automatisering op basis van prijs
 
