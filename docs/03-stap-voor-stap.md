@@ -81,21 +81,105 @@ toevoegen via de Shelly-app op je telefoon of ze tijdelijk dichter bij de HA Gre
 
 ### Resultaat van stap 2
 Je kunt inloggen op een werkende HA installatie en beide schakelmodules kun je AAN of UIT zetten in HA. 
+___
+## Stap 3 — Dynamische energieprijzen en prijsniveaus toevoegen
 
+Home Assistant moet weten **wanneer stroom goedkoop of duur is**.  
+Dat doe je door **prijsdata** van je energieleverancier binnen te halen en deze te voorzien van een prijsniveau.
 
-### Stap 3 — Dynamische energieprijzen & prijsniveaus
+### 3.1 Dynamische energieprijzen in HA krijgen
 
-Home Assistant haalt uurprijzen op via een energie-integratie.
+#### Optie A — Koppeling van je energieleverancier
 
-In plaats van absolute prijzen werken we met **prijsniveaus**:
-de actuele prijs wordt vergeleken met het **daggemiddelde**.
+Sommige energieleveranciers hebben een eigen integratie voor Home Assistant.  
+Even googlen op:
 
-Prijsniveaus:
-- Zeer goedkoop: ≤ 60%
-- Goedkoop: > 60% en ≤ 90%
-- Normaal: > 90% en < 115%
-- Duur: ≥ 115% en < 140%
-- Zeer duur: ≥ 140%
+> `[naam leverancier] Home Assistant integration`
+
+levert vaak al een werkende oplossing op.
+
+Zelf heb ik **Tibber** als leverancier en gebruik ik de volgende Tibber-integratie: [Tibber Prices Integration](https://jpawlowski.github.io/hass.tibber_prices/user/).  
+Een praktisch voordeel van deze integratie is dat deze **direct prijsniveaus** meelevert  
+(*zeer goedkoop, goedkoop, normaal, duur en zeer duur*), wat configuratiewerk scheelt.
+
+#### Optie B — ENTSO-E (universele optie)
+
+Kun je geen specifieke integratie voor jouw leverancier vinden?  
+Dan kun je de [ENTSO-E for Home Assistant](https://github.com/JaccoR/hass-entso-e) integratie gebruiken.
+
+Deze haalt de **Europese spotprijzen** op.  
+Bij het toevoegen van deze integratie kun je optioneel via een template
+de **vaste kosten en opslag** van jouw energieleverancier meenemen.
+Na installatie zijn er meerdere sensoren beschikbaar, waaronder de dagelijkse uurprijzen die nodig zijn om prijsniveaus te kunnen bepalen. 
+
+### 3.2 Prijsniveaus definiëren
+
+In **Stap 4** worden de **SG-Ready gedragsmodi** aangestuurd op basis van **prijsniveaus**:
+- zeer goedkoop  
+- goedkoop  
+- normaal  
+- duur  
+- zeer duur  
+
+Bij **Optie A (de Tibber integratie)** worden deze prijsniveaus automatisch aangeleverd in een sensor. Deze kun je vinden door naar de integratie te gaan:
+1. Ga naar **Instellingen → Apparaten & diensten → Integratie**
+2. Klik op de **Tibber Prijsinformatie & Beoordelingen** integratie
+3. Tussen de beschikbare sensoren staat een sensor: Uurprijsniveau en Kwartierprijsniveau (voor SG-ready sturing gebruiken we de uurprijsniveaus)
+
+Bij **Optie B (de ENTSO-E integratie)** dien je de prijsniveaus zelf te bepalen. De aanpak hiervoor is eenvoudig:
+> vergelijk elk uur de actuele prijs met het **daggemiddelde** en ken daar een niveau aan toe.
+
+| Prijsniveau      | Verhouding t.o.v. daggemiddelde |
+|------------------|---------------------------------|
+| Zeer goedkoop    | ≤ 60%                            |
+| Goedkoop         | > 60% en ≤ 90%                   |
+| Normaal          | > 90% en < 115%                  |
+| Duur             | ≥ 115% en < 140%                 |
+| Zeer duur        | ≥ 140%                           |
+
+Je kunt uiteraard eigen drempelwaardes en niveaus kiezen, maar voor de leesbaarheid en consistentie hanteren we hier dezelfde indeling als Tibber.
+
+Om een prijsniveau sensor in HA beschikbaar te krijgen op basis van de ENTSO-E integratie: 
+1. Ga naar **Instellingen → Apparaten & diensten → Helpers**
+2. Klik **+ Helper aanmaken → Template → Template sensor**
+3. **Naam:** Energieprijs niveau
+4. Plak de code uit **State template** hieronder
+5. Controleer de preview
+6. Klik **Verzenden**
+
+**State template:**
+
+> ⚠️ Pas in onderstaande code indien nodig `sensor.average_electricity_price` aan naar jouw prijssensor  
+> Voorbeeld ENTSO-e: `sensor.average_electricity_price`
+
+Kopieer deze code in het state template veld:
+
+```jinja2
+{% set prices = state_attr('sensor.average_electricity_price', 'prices_today') %}
+{% if prices and prices | length > 0 %}
+  {% set price_values = prices | map(attribute='price') | list %}
+  {% set avg = price_values | average %}
+  {% set current = states('sensor.average_electricity_price') | float(0) %}
+  {% if avg > 0 %}
+    {% set ratio = current / avg %}
+    {% if ratio <= 0.6 %}
+      Zeer goedkoop
+    {% elif ratio <= 0.9 %}
+      Goedkoop
+    {% elif ratio < 1.15 %}
+      Normaal
+    {% elif ratio < 1.4 %}
+      Duur
+    {% else %}
+      Zeer duur
+    {% endif %}
+  {% else %}
+    Onbekend
+  {% endif %}
+{% else %}
+  Onbekend
+{% endif %}
+```
 
 #### Template sensor: Energieprijsniveau (via UI)
 
@@ -131,6 +215,16 @@ Plak onderstaande code in het **State template** veld
   Onbekend
 {% endif %}
 
+
+### Resultaat van stap 3
+
+- Home Assistant beschikt over **actuele uurprijzen**
+- Er is een sensor die **elk uur automatisch het prijsniveau bepaalt**
+- Deze prijsniveaus vormen de **input voor de SG-Ready-automatisering in stap 4**
+
+
+
+
 ## Stap 4 — SG-Ready automatisering op basis van prijs
 
 Nu alle bouwstenen aanwezig zijn, worden ze samengebracht in één eenvoudige maar krachtige automatisering.
@@ -156,6 +250,9 @@ Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 | Zeer goedkoop        | dicht      | dicht      | Overcapaciteit / vol vermogen  |
 
 ⚠️ Onbekend of niet beschikbaar prijsniveau → **normaal bedrijf (failsafe)**.
+
+
+
 
 ### Automatisering aanmaken (via Home Assistant UI)
 
