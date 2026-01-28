@@ -58,7 +58,6 @@ De ene warmtepomp is hierin verfijnder dan de andere, maar in de praktijk komt h
 - slim vooruit verwarmen en warmte opslaan in het buffervat of in de woning zelf;
 - het verschuiven van prioriteiten tussen ruimteverwarming/-koeling en warm tapwater.
 
-
 Belangrijk ontwerpprincipe:
 - externe systemen bepalen *wanneer* een bepaald gedrag wenselijk is;
 - de warmtepomp bepaalt dus *hoe* dit intern wordt ingevuld.
@@ -67,19 +66,7 @@ Er worden geen setpoints geforceerd.
 Comfort, efficiëntie en veiligheid blijven bij de fabrikant.
 Juist deze scheiding maakt SG-Ready robuust, uitlegbaar en breed toepasbaar.
 
-
-
-### 1.3 Sturen op tijd in plaats van vermogen
-
-Met dynamische elektriciteitsprijzen is niet elk moment van de dag energetisch
-of maatschappelijk gelijkwaardig.
-
-Door het verbruik van de warmtepomp in de tijd te verschuiven:
-- verschuift elektriciteitsverbruik naar goedkopere uren;
-- worden pieken afgevlakt;
-- wordt het elektriciteitsnet gelijkmatiger benut.
-
-Dankzij de thermische massa van de woning blijft het comfort behouden.
+Sommige warmtepompleveranciers bieden ook eigen functionaliteit om warmtepompen aan te sturen op basis van dynamische prijzen. Zo heeft mijn Nibe-warmtepomp de functie Smart Price Adaption (SPA). Als je een snelle basisoplossing zoekt, kan dat prima werken. In de praktijk bleek SPA voor mij echter te beperkt, te traag en te weinig configureerbaar. SG-Ready biedt daarentegen maximale controle, flexibiliteit en betrouwbaarheid — precies wat je nodig hebt als je dynamische prijzen optimaal wilt benutten én je sturing wilt uitbreiden met bijvoorbeeld PV-overproductie en energieopslag.
 
 ---
 
@@ -91,14 +78,13 @@ Met een paar eenvoudige checks en beperkte hardware kun je starten.
 ### 2.1 Warmtepomp met SG-Ready ondersteuning
 
 Controleer of jouw warmtepomp SG-Ready ondersteunt.
+- Veel warmtepompen ondersteunen SG-Ready (grofweg 70–80% van de modellen van de afgelopen tien jaar), maar dit verschilt per fabrikant en type. Controleer daarom altijd de handleiding van jouw warmtepomp.
+- Je kunt ook de officiële <a href="https://www.waermepumpe.de/normen-technik/sg-ready/sg-ready-datenbank/" target="_blank" rel="noopener noreferrer"> SG-Ready-database </a> raadplegen. Deze lijst geeft een goede indicatie, maar is niet volledig. Sommige modellen — zoals mijn eigen Nibe F1145 — staan er bijvoorbeeld niet in, terwijl ze SG-Ready wel degelijk ondersteunen.
 
 Let op:
 - SG-Ready staat niet altijd in de achtergelaten installatiehandleiding;
 - download de meest recente handleiding van de fabrikant;
 - update indien nodig de warmtepompsoftware.
-
-Veel warmtepompen van de afgelopen 10 jaar ondersteunen SG-Ready,
-maar de exacte implementatie verschilt per merk en type.
 
 ### 2.2 Home Assistant als coördinatielaag
 
