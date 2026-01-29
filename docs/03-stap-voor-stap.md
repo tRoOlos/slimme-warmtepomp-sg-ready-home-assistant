@@ -1,12 +1,12 @@
 # 3. Een volledig stap-voor-stap implementatie
 
-Nu duidelijk is waarom slimme sturing zinvol is en wat je daarvoor nodig hebt, volgt nu de detaillering: hoe richt je het daadwerkelijk in? 
+Nu duidelijk is waarom slimme sturing zinvol is en wat je daarvoor nodig hebt, volgt onderstaand de detaillering: hoe richt je het daadwerkelijk in? 
 
 ## Stap 1 — Vind de SG-Ready ingangen op jouw warmtepomp en sluit de schakelmodules aan. 
 
-Elke warmtepomp met SG-Ready ondersteuning heeft  **twee ingangen** (meestal aangeduid als **A** en **B**). Deze schakelsignalen bepalen samen de vier gedragsmodi. Afhankelijk van het merk kunnen deze ingangen verschillende namen hebben, zoals: A/B, SG-1 / SG-2, AUX 1 / AUX 2 etc. Check de handleiding waar deze twee ingangen zich bevinden op de warmtepomp. 
+Elke warmtepomp met SG-Ready-ondersteuning heeft  **twee ingangen** (meestal aangeduid als **A** en **B**). Deze schakelsignalen bepalen samen de vier gedragsmodi. Afhankelijk van het merk kunnen deze ingangen verschillende namen hebben, zoals: A/B, SG-1 / SG-2, AUX 1 / AUX 2 etc. Check de handleiding waar deze twee ingangen zich bevinden op de warmtepomp. 
 
-De twee ingangen gaan geschakeld worden door de **twee Shelly-schakelmodules**, zet voor de duidelijkheid op een module een A en op de andere module een B.
+De twee ingangen gaan geschakeld worden door de **twee Shelly-schakelmodules**. Zet voor de duidelijkheid op een module een A en op de andere module een B.
 
 #### 1.1 Voeden van de schakelmodules (230 V)
 
@@ -23,7 +23,7 @@ Met lasklemmen kun je **L en N doorlussen** naar beide schakelmodules, zodat ze 
 #### 1.2 Verbinden van de schakelmodules met de SG-Ready-ingangen
 
 Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit. 
-Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-ready nog aan dient te zetten in een (service)menu. 
+Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-Ready nog aan dient te zetten in het (service)menu van xde warmtepomp. 
 
 Voor de verbinding tussen de schakelmodules en de warmtepomp ingangen gebruik je bij voorkeur een stukje **UTP-kabel**.  
 SG-Ready werkt met een **spanningsloos (potentiaalvrij) contact** — de aders van een UTP-kabel zijn hiervoor ideaal.
@@ -46,11 +46,15 @@ Belangrijk:
 Wanneer alles is aangesloten:
 1. steek je de stekker in het stopcontact;
 2. zet je de warmtepomp weer onder spanning;
-3. zet je SG-ready aan in het warmtepomp (service) menu (indien nodig). 
+3. zet je SG-Ready aan in het warmtepomp (service) menu (indien nodig). 
 
-Aansluitschema van twee shelly schakelmodules met de SG-Reeady ingangen op de warmtepomp:
+Aansluitschema van twee Shelly schakelmodules met de SG-Ready ingangen op de warmtepomp:
 
 <img width="425" height="227" alt="aansluitschema- schakelcontacten" src="https://github.com/user-attachments/assets/ea38d3be-4aae-4161-b79c-2202e58e79a0" />
+
+Twee Shelly schakelmodules, klaar om aangesloten te worden op de SG-Ready-ingangen van de warmtepomp:
+![IMG_3252](https://github.com/user-attachments/assets/f46e6c3f-e8f3-4eb0-91f0-9c92121c91c6)
+
 
 ### Resultaat van stap 1
 
@@ -74,15 +78,13 @@ De Green is volledig plug-and-play: aansluiten, opstarten en beginnen.
 
 Bij het afronden van stap 1 heb je beide schakelmodules van stroom voorzien, voeg ze toe aan HA:
 - Ga in HA naar instellingen – apparaten en diensten
-- HA ontdekt beide schakelmodules via bluetooth, ze verschijnen als: “Shelly1G4…”. Klik op toevoegen bij een van beide modules en klik op volgende op de shelly te voorzien van je wifi instellingen. Je ziet dat het rode lichtje blijft branden (ipv knipperen) zodra de module verbonden is met je wifi -> check of je A of B op de module had gezet en geef vervolgens de module de juiste naam (SG-Ready-schakelmodule-A of SG-Ready-schakelmodule-B) en klik op voltooien.
-- Beide schakelmodules zijn nu beschikbaar als aan/uit schakelaar. Check hiervoor het menu: apparaten en diensten, klik op de shelly integratie en check of beide schakelmodules zichtbaar zijn en of je ze aan(dicht) of uit (Open) kunt zetten. Laat ze voor nu beide op uit (Open) staan (=Normaal bedrijf warmtepomp).
+- HA ontdekt beide schakelmodules via bluetooth, ze verschijnen als: “Shelly1G4…”. Klik op toevoegen bij een van beide modules en klik op volgende op de Shelly te voorzien van je wifi instellingen. Je ziet dat het rode lichtje blijft branden (i.p.v. knipperen) zodra de module verbonden is met je wifi → check of je A of B op de module had gezet en geef vervolgens de module de juiste naam (SG-Ready-schakelmodule-A of SG-Ready-schakelmodule-B) en klik op voltooien.
+- Beide schakelmodules zijn nu beschikbaar als aan/uit schakelaar. Check hiervoor het menu: apparaten en diensten, klik op de Shelly integratie en check of beide schakelmodules zichtbaar zijn en of je ze aan(dicht) of uit (Open) kunt zetten. Laat ze voor nu beide op uit (Open) staan (=Normaal bedrijf warmtepomp).
 
-*Indien Home Assistant de schakelmodules niet automatisch ontdekt, kan het zijn dat de afstand
-tussen je HA Green en de modules te groot is voor Bluetooth. In dat geval kun je de modules
-toevoegen via de Shelly-app op je telefoon of ze tijdelijk dichter bij de HA Green van stroom voorzien.*
+*Indien Home Assistant de schakelmodules niet automatisch ontdekt, kan het zijn dat de afstand tussen je HA Green en de modules te groot is voor Bluetooth. In dat geval kun je de modules toevoegen via de Shelly-app op je telefoon of ze tijdelijk dichter bij de HA Green van stroom voorzien.*
 
 ### Resultaat van stap 2
-Je kunt inloggen op een werkende HA installatie en beide schakelmodules kun je AAN of UIT zetten in HA. 
+Je kunt inloggen op een werkende HA-installatie en beide schakelmodules kun je AAN of UIT zetten in HA. 
 ___
 ## Stap 3 — Dynamische energieprijzen en prijsniveaus toevoegen
 
@@ -126,7 +128,7 @@ In **Stap 4** worden de **SG-Ready gedragsmodi** aangestuurd op basis van **prij
 Bij **Optie A (de Tibber integratie)** worden deze prijsniveaus automatisch aangeleverd in een sensor. Deze kun je vinden door naar de integratie te gaan:
 1. Ga naar **Instellingen → Apparaten & diensten → Integratie**
 2. Klik op de **Tibber Prijsinformatie & Beoordelingen** integratie
-3. Tussen de beschikbare sensoren staat een sensor: Uurprijsniveau en Kwartierprijsniveau (voor SG-ready sturing gebruiken we de uurprijsniveaus)
+3. Tussen de beschikbare sensoren staat een sensor: Uurprijsniveau en Kwartierprijsniveau (voor SG-Ready sturing gebruiken we de uurprijsniveaus)
 
 Bij **Optie B (de ENTSO-E integratie)** dien je de prijsniveaus zelf te bepalen. De aanpak hiervoor is eenvoudig:
 > vergelijk elk uur de actuele prijs met het **daggemiddelde** en ken daar een niveau aan toe.
@@ -224,7 +226,7 @@ Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 2. Klik **Automatisering toevoegen**
 3. Kies als **Wanneer** trigger:
    - Entiteit → Status (wanneer de status van een entiteit verandert
-   - Selecteer de prijsniveausensor uit stap 3 (bijv. `sensor.energieprijs_niveau`)
+   - Selecteer de prijsniveau sensor uit stap 3 (bijv. `sensor.energieprijs_niveau`)
 4. Kies vervolgens de acties met de **Als / Dan-logica**:
    - Als prijsniveau = Normaal → A uit, B uit
    - Als prijsniveau = Duur of Zeer duur → A aan, B uit
@@ -370,14 +372,14 @@ Deze sensor maak je als volgt aan
 **DREMPELWAARDES (AAN / UIT) T.B.V. HYSTERESE**
 
 Om onrustig schakelen te voorkomen, werken we met twee drempels:
-- AAN-drempel (hoger -> wanneer er structureel overschot is, het minimaal continu beschikbaar vermogen)
-- UIT-drempel (lager -> wanneer het overschot daadwerkelijk wegvalt)
+- AAN-drempel (hoger → wanneer er structureel overschot is, het minimaal continu beschikbaar vermogen)
+- UIT-drempel (lager → wanneer het overschot daadwerkelijk wegvalt)
 Zo voorkom je “flapperen” (continu aan/uit schakelen) door wolken of korte dips.
 
 Deze entiteiten maak je als volgt aan als zogenaamde numerieke helpers.
 
 Overproductie AAN-drempel sensor: 
-- Instellingen - apparaten en diensten - helpers -> + Helper aanmaken → Nummeriek
+- Instellingen - apparaten en diensten - helpers → + Helper aanmaken → Nummeriek
 - Naam: Overproductie AAN drempel
 - Min: 0
 - Max: 10
@@ -390,7 +392,7 @@ Overproductie AAN-drempel sensor:
 - Dubbelklik op de aangemaakte sensor en stel deze initieel in met een richtwaarde: bijv. 1.0 kW
 
 Overproductie UIT-drempel sensor:  
-- Instellingen - apparaten en diensten - helpers -> + Helper aanmaken → Nummeriek
+- Instellingen - apparaten en diensten - helpers → + Helper aanmaken → Nummeriek
 - Naam: Overproductie UIT drempel
 - Min: 0
 - Max: 10
