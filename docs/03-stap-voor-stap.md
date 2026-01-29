@@ -348,15 +348,14 @@ berekent:
 - netto overproductie = totale opwek − totaal verbruik
 - negatieve waarden worden afgekapt (sensor is altijd ≥ 0 W)
 
-Deze sensor maak je als volgt aan 
-	1.	Instellingen → Apparaten & diensten → Helpers
-	2.	+ Helper aanmaken → Template → Template sensor
-	3.	Vul in:
-	- Naam: Overproductie actief
-	- Eenheid: W
+Deze sensor maak je als volgt aan:
+1. Instellingen → Apparaten & diensten → Helpers
+2. Helper aanmaken (+) → Template → Template sensor en vul in:
+    - Naam: Overproductie actief
+	- Eenheid: kW
 	- Device class: power
-	4.	Plak onderstaande code in het State-veld
-	5.	Klik Verzenden
+3. Plak onderstaande code in het State-veld
+4. Klik Verzenden
 
 ⚠️ Pas in de onderstaande code de entiteitsnamen aan naar jouw entiteiten die je in de P1-lezer integratie kunt vinden
 
@@ -373,6 +372,10 @@ Deze sensor maak je als volgt aan
   )) 
 }}
 ```
+Overproductie actief sensor voorbeeld in geschiedenis weergave:
+
+<img width="563" height="383" alt="overproductie sensor voorbeeld" src="https://github.com/user-attachments/assets/7a98c7d2-f08d-48a4-aad4-a36dc392345a" />
+
 **DREMPELWAARDES (AAN / UIT) T.B.V. HYSTERESE**
 
 Om onrustig schakelen te voorkomen, werken we met twee drempels:
@@ -407,6 +410,11 @@ Overproductie UIT-drempel sensor:
 	- (Optioneel) Icoon: mdi:solar-power
 - Klik op verzenden/OK om de sensor aan te maken.
 - Dubbelklik op de aangemaakte sensor en stel deze initieel in met een richtwaarde: bijv. 0.3 kW
+
+Voorbeeld:
+
+<img width="393" height="126" alt="overproductie hysterese" src="https://github.com/user-attachments/assets/89977901-1038-4da1-a00f-141e7f1cd40d" />
+
 
 ### 6.3 Automatisering uitbreiden voor SG-Ready bijsturing op PV-overproductie
 
