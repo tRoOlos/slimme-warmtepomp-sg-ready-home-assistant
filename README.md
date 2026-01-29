@@ -1,7 +1,7 @@
 # Slimme warmtepompsturing met SG-Ready en Home Assistant
 
 Deze repository vormt de **verdieping** bij het LinkedIn-artikel
-[**“Slimme warmtepompsturing: besparen, comfort behouden én het net helpen”**](https://www.linkedin.com/pulse/slimme-warmtepompsturing-besparen-comfort-behouden-%25C3%25A9n-roel-teeuwen-m56se)
+[**“Slimme warmtepompsturing: besparen, comfort behouden én het net helpen”**](https://www.linkedin.com/pulse/slimme-warmtepompsturing-besparen-comfort-behouden-%25C3%25A9n-roel-teeuwen-m56se).
 
 Waar het artikel ingaat op het *waarom* en de ontwerpkeuzes, beschrijft deze documentatie
 de **concrete werking en implementatie** — volledig gebaseerd op bestaande apparatuur
