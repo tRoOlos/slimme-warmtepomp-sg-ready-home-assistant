@@ -74,3 +74,5 @@ Voor deze slimme warmtepompsturing:
 - kijkt HA naar energieverbruik of overproductie (optioneel);
 - beslist HA welke SG-Ready-stand actief moet zijn;
 - stuurt HA via twee eenvoudige schakelmodules de warmtepomp aan.
+
+← [Terug naar de inhoudsopgave](https://github.com/tRoOlos/slimme-warmtepomp-sg-ready-home-assistant/tree/main)
