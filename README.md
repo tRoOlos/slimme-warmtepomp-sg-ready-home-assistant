@@ -18,7 +18,10 @@ Veel van deze flexibiliteit is vandaag al mogelijk — met bestaande apparatuur 
 
 ## Inhoud
 
-1. [Hoe werkt dit principe?](docs/01-principe.md)  
-2. [Wat heb je nodig om te beginnen?](docs/02-benodigdheden.md)  
-3. [Stap-voor-stap implementatie](docs/03-stap-voor-stap.md)
+1. [Hoe werkt dit principe?](docs/01-principe.md)
+   - Verdieping van het concept achter SG-Ready-sturing en gedragsgestuurde warmtepompen beter wil begrijpen.
+3. [Wat heb je nodig om te beginnen?](docs/02-benodigdheden.md)
+   -  Overzicht van de benodigde hardware en randvoorwaarden. 
+5. [Stap-voor-stap implementatie](docs/03-stap-voor-stap.md)
+   - Praktische handleiding om deze oplossing zelf in te richten in Home Assistant.
 
