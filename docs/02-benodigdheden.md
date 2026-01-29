@@ -35,3 +35,5 @@ Voor een praktische en betaalbare setup:
 ### 2.4 Dynamisch energiecontract
 
 Voor prijssturing is een dynamisch contract nodig waarbij de prijzen per uur of 15m beschikbaar zijn.
+
+← [Terug naar de inhoudsopgave](https://github.com/tRoOlos/slimme-warmtepomp-sg-ready-home-assistant/tree/main)
