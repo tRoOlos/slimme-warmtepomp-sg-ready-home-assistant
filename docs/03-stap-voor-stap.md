@@ -442,3 +442,4 @@ De warmtepomp fungeert hiermee als een **flexibele, lokale energiebuffer**:
 zonnestroom wordt benut wanneer die er is, pieken worden afgevlakt
 en het elektriciteitsnet wordt ontlast — volledig automatisch en zonder comfortverlies.
 
+← [Terug naar de inhoudsopgave](https://github.com/tRoOlos/slimme-warmtepomp-sg-ready-home-assistant/tree/main)
