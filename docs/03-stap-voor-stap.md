@@ -22,9 +22,10 @@ Met lasklemmen kun je **L en N doorlussen** naar beide schakelmodules, zodat ze 
 
 #### 1.2 Verbinden van de schakelmodules met de SG-Ready-ingangen
 
-Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit.
+Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit. 
+Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-ready nog aan dient te zetten in een (service)menu. 
 
-Voor de verbinding tussen de schakelmodules en de warmtepomp gebruik je bij voorkeur een stukje **UTP-kabel**.  
+Voor de verbinding tussen de schakelmodules en de warmtepomp ingangen gebruik je bij voorkeur een stukje **UTP-kabel**.  
 SG-Ready werkt met een **spanningsloos (potentiaalvrij) contact** — de aders van een UTP-kabel zijn hiervoor ideaal.
 
 Belangrijk:
@@ -44,7 +45,8 @@ Belangrijk:
 
 Wanneer alles is aangesloten:
 1. steek je de stekker in het stopcontact;
-2. zet je de warmtepomp weer onder spanning.
+2. zet je de warmtepomp weer onder spanning;
+3. zet je SG-ready aan in het warmtepomp (service) menu (indien nodig). 
 
 Aansluitschema van twee shelly schakelmodules met de SG-Reeady ingangen op de warmtepomp:
 
@@ -203,9 +205,9 @@ Elke keer dat het prijsniveau wijzigt:
 
 Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 
-### Koppeling prijsniveau → SG-Ready gedrag
+### Koppeling prijsniveau → SG-Ready gedrag (schakelmodules A en B)
 
-| Prijsniveau           | SG-Ready A | SG-Ready B | Gedrag warmtepomp              |
+| Prijsniveau          | SG-Ready A | SG-Ready B | Gedrag warmtepomp              |
 |----------------------|-----------:|-----------:|--------------------------------|
 | Normaal              | open       | open       | Normaal bedrijf                |
 | Duur / Zeer duur     | dicht      | open       | Beperken / blokkeren           |
@@ -213,18 +215,17 @@ Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 | Zeer goedkoop        | dicht      | dicht      | Overcapaciteit / vol vermogen  |
 
 ⚠️ Onbekend of niet beschikbaar prijsniveau → **normaal bedrijf (failsafe)**.
-
-
-
+- Open wil zeggen: de betreffende SG-Ready-schakelmodule (stap 2.2) staat uit
+- Dicht wil zeggen: de betreffende SG-Ready-schakelmodule (stap 2.2) staat aan  
 
 ### Automatisering aanmaken (via Home Assistant UI)
 
 1. Ga naar **Instellingen → Automatiseringen & scènes → Automatiseringen**
 2. Klik **Automatisering toevoegen**
-3. Kies als trigger:
-   - *Entiteit → Status gewijzigd*
-   - Selecteer de prijsniveausensor (bijv. `sensor.energieprijs_niveau`)
-4. Voeg acties toe met **Als / Dan-logica**:
+3. Kies als **Wanneer** trigger:
+   - Entiteit → Status (wanneer de status van een entiteit verandert
+   - Selecteer de prijsniveausensor uit stap 3 (bijv. `sensor.energieprijs_niveau`)
+4. Kies vervolgens de acties met de **Als / Dan-logica**:
    - Als prijsniveau = Normaal → A uit, B uit
    - Als prijsniveau = Duur of Zeer duur → A aan, B uit
    - Als prijsniveau = Goedkoop → A uit, B aan
@@ -234,45 +235,217 @@ Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 
 **Resultaat Stap 4**
 
-- De warmtepomp reageert automatisch op uurprijzen
-- Het verbruik verschuift naar gunstigere momenten
-- Comfort en veiligheid blijven intact
-- Het systeem is robuust door een expliciete failsafe
+- Home Assistant stuurt automatisch elk uur de juiste SG-Ready-stand
+- De warmtepomp reageert zonder comfortverlies
+- Het verbruik verschuift structureel naar goedkopere uren, je gaat vanaf nu geld besparen
+- Het elektriciteitsnet wordt minder belast
+___
+## Stap 5 — Verifieer gedrag en monitor het effect
 
-## Stap 5 — Verifiëren en monitoren van gedrag
+De automatisering is nu actief, maar voordat je dit als “af” beschouwt, is één stap cruciaal:
+controleren of de warmtepomp het **SG-Ready-signaal correct ontvangt** en zich **voorspelbaar gedraagt**.
 
-Na activeren van de automatisering is het belangrijk om te controleren
-of de warmtepomp het SG-Ready-signaal correct ontvangt en zich voorspelbaar gedraagt.
+### 5.1 Verifieer SG-Ready-detectie in de warmtepomp
 
-### Verifiëren in de warmtepomp
-
-Veel warmtepompen tonen de actuele SG-Ready-status in het servicemenu.
+Bij veel warmtepompen is er in een menuoptie een SG-Ready-statusscherm beschikbaar.
 Controleer hier:
-- welke SG-Ready-modus actief is;
-- of ingang A en B correct worden herkend (open/dicht);
-- of het gedrag overeenkomt met de gekozen modus.
 
-Als dit klopt, weet je dat:
-- de bekabeling correct is;
-- de schakelmodules functioneren;
-- de SG-Ready-sturing daadwerkelijk wordt toegepast.
+- welke **SG-Ready-stand** actief is;
+- of **ingang A en B** correct worden gedetecteerd (open of dicht);
+- of het **gedrag van de warmtepomp** overeenkomt met het gekozen prijsniveau (je kunt de prijsniveau sensor handmatig even wijzigen om te testen).
 
-### Monitoren via Home Assistant
+Als deze signalen zichtbaar zijn, weet je dat:
 
-Laat het systeem enkele dagen ongewijzigd draaien.
-Via **Geschiedenis** in Home Assistant kun je terugzien:
-- wanneer SG-Ready A en B zijn geschakeld;
-- welk gedrag actief was;
-- hoe dit samenvalt met prijsniveaus en verbruik.
+- de **bekabeling correct** is aangesloten;
+- de **schakelmodules** goed functioneren;
+- de warmtepomp de **SG-Ready-sturing daadwerkelijk toepast**.
 
-Je hebt hiervoor geen aparte dashboards nodig:
-de standaard geschiedenisweergave is voldoende om effect en stabiliteit te beoordelen.
+### 5.2 Monitor het systeemgedrag over meerdere dagen
 
-**Resultaat Stap 5**
+Laat het systeem vervolgens **enkele dagen ongewijzigd draaien**.
+In Home Assistant kun je het gedrag eenvoudig terugkijken via de **geschiedenis** menu optie.
 
-- Je ziet dat het schakelen rustig en logisch verloopt
-- Dure uren worden vermeden
-- Goedkope uren worden actief benut
+In het geschiedenis menu kun je sensoren toevoegen zoals: prijsniveau, de schakelmodules, prijs, verbruik (indien aanwezig) etc. om in een tijdsweergave te zien:
+
+- wanneer schakelmodule **A** en **B** aan of uit stonden;
+- welke **SG-Ready-modus** gedurende de dag actief was;
+- hoe dit samenvalt met **elektriciteitsprijzen en verbruik**.
+
+Hierdoor wordt zichtbaar:
+
+- dat het warmtepompverbruik verschuift naar **goedkopere uren**;
+- dat **dure uren** worden vermeden of afgevlakt;
+- dat het schakelen **beperkt, stabiel en logisch** blijft.
+
+*Je hoeft hiervoor geen aparte dashboards of grafieken te maken:  
+de standaard geschiedenisweergave van Home Assistant is voldoende
+om effect en gedrag goed te begrijpen.*
+___
+## Stap 6 — (Optioneel) inzicht in verbruik, PV-overproductie detecteren en SG-Ready bijsturen
+
+Het energiesysteem ontwikkelt zich steeds meer richting optimalisatie **achter de meter**.
+Zeker wanneer je zonnepanelen hebt, wordt het slim benutten van eigen opwek steeds belangrijker.
+
+Door energie-intensieve apparaten — zoals een warmtepomp — juist op momenten van
+**lokaal overschot** te laten draaien of energie tijdelijk op te slaan, verhoog je
+de effectiviteit van je energiesysteem.
+
+Puur financieel bekeken is het maximaliseren van eigen verbruik bij PV-overproductie
+niet altijd optimaal (bijvoorbeeld wanneer de terugleververgoeding hoger is dan de
+inkoopprijs).  Maar in de praktijk geldt vaak:
+
+- wek je op jaarbasis **meer op dan je afneemt**, dan is eigen verbruik vrijwel altijd gunstig;
+- na afschaffing van de **salderingsregeling (vanaf 2027)** en bij **terugleverkosten**
+  wordt het optimaliseren van eigen verbruik steeds belangrijker;
+- bij **negatieve stroomprijzen** kan het zelfs logisch zijn om actief verbruik te verhogen. Met Home Assistant kun je in zulke situaties óók zonnepanelen tijdelijk uitschakelen
+of dynamisch dimmen om teruglevering te voorkomen — maar dat is voer voor een volgend artikel.
+
+### Van financiële optimalisatie naar systeemoptimalisatie
+
+In dit artikel beperken we ons tot:
+- realtime **inzicht in verbruik en teruglevering** in Home Assistant;
+- het **uitbreiden van de automatisering uit stap 4** om SG-Ready bij te sturen
+  op basis van PV-overproductie.
+
+Hiervoor is een **slimme-meter P1-lezer** nodig (zie hoofdstuk 2).
+
+### 6.1 Sluit een P1-lezer aan op je slimme meter en Home Assistant
+
+Voor circa €30 is een wifi-P1-lezer verkrijgbaar die plug-and-play is.
+Volg de instructies van de P1-lezer om deze op de P1-poort van je slimme meter.
+
+De P1-lezer levert lokaal data aan HA en maakt sensoren beschikbaar voor o.a.:
+
+- totaal verbruik en teruglevering;
+- productie en afname per fase;
+- spanning en stroom per fase.
+
+Deze sensoren kun je direct toevoegen aan het **Home Assistant Energie-dashboard**
+voor realtime én historisch inzicht.
+
+### 6.2 SG-Ready bijsturen op basis van PV-overproductie
+
+Het principe is eenvoudig:
+
+> **Wanneer je structureel stroom teruglevert aan het net, mag de warmtepomp maximaal draaien.**
+
+In de zomer geldt dit ook voor **koelen**, indien je warmtepomp die functie ondersteunt.
+
+#### PV-overproductie detecteren
+
+Via de P1-lezer zijn in Home Assistant sensoren beschikbaar die per fase het actuele
+vermogen tonen voor **productie** en **verbruik**.
+
+Op basis daarvan maak je een extra sensor aan die de **netto PV-overproductie**
+berekent:
+
+- netto overproductie = totale opwek − totaal verbruik
+- negatieve waarden worden afgekapt (sensor is altijd ≥ 0 W)
+
+Deze sensor maak je als volgt aan 
+	1.	Instellingen → Apparaten & diensten → Helpers
+	2.	+ Helper aanmaken → Template → Template sensor
+	3.	Vul in:
+	•	Naam: Overproductie actief
+	•	Eenheid: W
+	•	Device class: power
+	4.	Plak onderstaande code in het State-veld
+	5.	Klik Verzenden
+
+⚠️ Pas in de onderstaande code de entiteitsnamen aan naar jouw entiteiten die je in de P1-lezer integratie kunt vinden
+
+```
+{{ 
+  max(0, (
+    states('sensor.power_produced_phase_1') | float +
+    states('sensor.power_produced_phase_2') | float +
+    states('sensor.power_produced_phase_3') | float
+  ) - (
+    states('sensor.power_consumed_phase_1') | float +
+    states('sensor.power_consumed_phase_2') | float +
+    states('sensor.power_consumed_phase_3') | float
+  )) 
+}}
+```
+
+**DREMPELWAARDES (AAN / UIT) T.B.V. HYSTERESE**
+
+Om onrustig schakelen te voorkomen, werken we met twee drempels:
+- AAN-drempel (hoger -> wanneer er structureel overschot is, het minimaal continu beschikbaar vermogen)
+- UIT-drempel (lager -> wanneer het overschot daadwerkelijk wegvalt)
+Zo voorkom je “flapperen” (continu aan/uit schakelen) door wolken of korte dips.
+
+Deze entiteiten maak je als volgt aan als zogenaamde numerieke helpers.
+
+Overproductie AAN-drempel sensor: 
+- Instellingen - apparaten en diensten - helpers -> + Helper aanmaken → Nummeriek
+- Naam: Overproductie AAN drempel
+- Min: 0
+- Max: 10
+- Geavanceerde instellingen: 
+	- Weergave: invoerveld
+	- Stapgrootte: 0.1 
+	- Meeteenheid: kW
+	- (Optioneel) Icoon: mdi:solar-power
+- Klik op verzenden/OK om de sensor aan te maken.
+- Dubbelklik op de aangemaakte sensor en stel deze initieel in met een richtwaarde: bijv. 1.0 kW
+
+Overproductie UIT-drempel sensor:  
+- Instellingen - apparaten en diensten - helpers -> + Helper aanmaken → Nummeriek
+- Naam: Overproductie UIT drempel
+- Min: 0
+- Max: 10
+- Geavanceerde instellingen: 
+	- Weergave: invoerveld
+	- Stapgrootte: 0.1 
+	- Meeteenheid: kW
+	- (Optioneel) Icoon: mdi:solar-power
+- Klik op verzenden/OK om de sensor aan te maken.
+- Dubbelklik op de aangemaakte sensor en stel deze initieel in met een richtwaarde: bijv. 0.3 kW
+
+### 6.3 Automatisering uitbreiden voor SG-Ready bijsturing op PV-overproductie
+
+Nu de PV-overproductie betrouwbaar wordt gedetecteerd, kan de automatisering uit
+**stap 4** worden uitgebreid.
+
+Zolang er **lokaal overschot** is, mag de warmtepomp maximaal draaien —
+**onafhankelijk van het actuele uurprijsniveau**.
+
+Pas wanneer dat overschot structureel wegvalt, neemt de prijsgebaseerde sturing
+het weer over.
+
+Breid de automatisering als volgt uit:
+
+- **Bovenaan** een extra conditie:
+  - Als netto PV-overproductie **boven de AAN-drempel** komt:
+    - SG-Ready ingang **A = aan**
+    - SG-Ready ingang **B = aan**
+    - (warmtepomp in **Overcapaciteit-modus**)
+
+- **Alleen als deze conditie niet waar is**:
+  - voer de bestaande prijslogica uit (stap 4)
+
+- **Terugschakelen** gebeurt pas wanneer:
+  - de netto PV-overproductie gedurende een ingestelde periode
+    **onder de UIT-drempel blijft** (bijv. 5 minuten)
+
+Door deze tijdsvertraging hebben korte dips — bijvoorbeeld door bewolking —
+geen effect op de SG-Ready-stand.
+
+---
+
+### Resultaat van stap 6
+
+- Realtime inzicht in **verbruik, opwek en teruglevering**
+- PV-overproductie wordt automatisch gedetecteerd
+- Bij lokaal overschot schakelt de warmtepomp automatisch naar
+  **SG-Ready Overcapaciteit**
+- Zodra het overschot structureel wegvalt, neemt de **prijsgebaseerde sturing**
+  het weer over
+
+De warmtepomp fungeert hiermee als een **flexibele, lokale energiebuffer**:
+zonnestroom wordt benut wanneer die er is, pieken worden afgevlakt
+en het elektriciteitsnet wordt ontlast — volledig automatisch en zonder comfortverlies.
 
 ## Stap 6 — (Optioneel) PV-overproductie detecteren en SG-Ready bijsturen
 
