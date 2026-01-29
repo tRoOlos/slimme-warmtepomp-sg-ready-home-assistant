@@ -367,7 +367,6 @@ Deze sensor maak je als volgt aan
   )) 
 }}
 ```
-
 **DREMPELWAARDES (AAN / UIT) T.B.V. HYSTERESE**
 
 Om onrustig schakelen te voorkomen, werken we met twee drempels:
@@ -416,30 +415,26 @@ het weer over.
 
 Breid de automatisering als volgt uit:
 
-- **Bovenaan** een extra conditie:
+- menu: instellingen - automatiseringen & scenes
+- selecteer de automatisering uit stap 4 
+- **Bovenaan** een extra conditie toevoegen:
   - Als netto PV-overproductie **boven de AAN-drempel** komt:
     - SG-Ready ingang **A = aan**
     - SG-Ready ingang **B = aan**
-    - (warmtepomp in **Overcapaciteit-modus**)
-
+    - *(warmtepomp in **Overcapaciteit-modus**)*
 - **Alleen als deze conditie niet waar is**:
   - voer de bestaande prijslogica uit (stap 4)
-
 - **Terugschakelen** gebeurt pas wanneer:
   - de netto PV-overproductie gedurende een ingestelde periode
     **onder de UIT-drempel blijft** (bijv. 5 minuten)
-
-Door deze tijdsvertraging hebben korte dips — bijvoorbeeld door bewolking —
-geen effect op de SG-Ready-stand.
-
----
+  - *Door deze tijdsvertraging hebben korte dips — bijvoorbeeld door bewolking —
+geen effect op de SG-Ready-stand.*
 
 ### Resultaat van stap 6
 
 - Realtime inzicht in **verbruik, opwek en teruglevering**
 - PV-overproductie wordt automatisch gedetecteerd
-- Bij lokaal overschot schakelt de warmtepomp automatisch naar
-  **SG-Ready Overcapaciteit**
+- Bij lokaal overschot schakelt de warmtepomp automatisch naar **SG-Ready Overcapaciteit**
 - Zodra het overschot structureel wegvalt, neemt de **prijsgebaseerde sturing**
   het weer over
 
@@ -447,90 +442,3 @@ De warmtepomp fungeert hiermee als een **flexibele, lokale energiebuffer**:
 zonnestroom wordt benut wanneer die er is, pieken worden afgevlakt
 en het elektriciteitsnet wordt ontlast — volledig automatisch en zonder comfortverlies.
 
-## Stap 6 — (Optioneel) PV-overproductie detecteren en SG-Ready bijsturen
-
-Wanneer zonnepanelen aanwezig zijn, kan lokaal opgewekte energie
-worden benut door de warmtepomp extra te laten draaien.
-
-Dit is een **uitbreiding** op prijssturing, geen vervanging.
-
-### 6.1 Netto PV-overproductie berekenen
-
-Netto PV-overproductie wordt bepaald als:
-
-netto overproductie = totale opwek − totaal verbruik
-
-Negatieve waarden worden afgekapt zodat de sensor altijd ≥ 0 W is.
-
-```jinja2
-{{ 
-  max(0, (
-    states('sensor.power_produced_phase_1') | float +
-    states('sensor.power_produced_phase_2') | float +
-    states('sensor.power_produced_phase_3') | float
-  ) - (
-    states('sensor.power_consumed_phase_1') | float +
-    states('sensor.power_consumed_phase_2') | float +
-    states('sensor.power_consumed_phase_3') | float
-  )) 
-}}
-
-### 6.2 Hysterese: AAN- en UIT-drempels
-
-```md
-### 6.2 Hysterese: AAN- en UIT-drempels
-
-Om onrustig schakelen te voorkomen (bijv. door wolken),
-wordt gewerkt met twee drempels:
-
-- **AAN-drempel** (hoger): wanneer er structureel overschot is
-- **UIT-drempel** (lager): wanneer het overschot daadwerkelijk wegvalt
-
-Deze maak je aan als **Numerieke helpers** in Home Assistant.
-
-Voorbeeldwaarden:
-- Overproductie AAN-drempel: 1.0 kW
-- Overproductie UIT-drempel: 0.3 kW
-
-De exacte waarden zijn afhankelijk van je PV-installatie
-en kunnen na monitoring eenvoudig worden aangepast.
-
-### 6.3 Aanpassen van de automatisering voor SG-Ready bijsturing op PV-overproductie
-
-De bestaande automatisering uit Stap 4 wordt uitgebreid met een extra conditie bovenaan:
-
-- **Als** netto PV-overproductie boven de AAN-drempel komt:
-  - SG-Ready A = aan
-  - SG-Ready B = aan
-  - (warmtepomp in Overcapaciteit-modus)
-- **Anders**:
-  - voer de bestaande prijslogica uit
-
-Terugschakelen gebeurt pas wanneer:
-- de netto overproductie **langer onder de UIT-drempel blijft**
-  (bijvoorbeeld 5 minuten)
-
-Door deze tijdsvertraging hebben korte dips geen effect.
-
-**Resultaat Stap 6**
-
-- Realtime inzicht in verbruik en teruglevering
-- Automatische benutting van lokaal PV-overschot
-- SG-Ready wordt dynamisch bijgestuurd
-- Het systeem groeit uit tot een volwaardig thuis-energiemanagementsysteem
-
-## Resultaat en conclusie
-
-Met deze aanpak verandert de warmtepomp van een puur vraaggestuurd apparaat
-naar een flexibel onderdeel van het energiesysteem.
-
-Het verbruik verschuift automatisch naar momenten waarop stroom goedkoper
-of lokaal beschikbaar is, terwijl comfort en veiligheid behouden blijven.
-
-Home Assistant fungeert hierbij als coördinatielaag:
-er wordt niets geforceerd, alleen het gewenste gedrag wordt aangegeven.
-Dat maakt de sturing robuust, uitlegbaar en schaalbaar.
-
-Veel van deze flexibiliteit is vandaag al mogelijk —
-met bestaande apparatuur en open standaarden,
-door het juiste signaal op het juiste moment.
