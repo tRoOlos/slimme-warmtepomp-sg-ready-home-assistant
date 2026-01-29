@@ -23,7 +23,7 @@ Met lasklemmen kun je **L en N doorlussen** naar beide schakelmodules, zodat ze 
 #### 1.2 Verbinden van de schakelmodules met de SG-Ready-ingangen
 
 Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit. 
-Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-Ready nog aan dient te zetten in het (service)menu van de warmtepomp. 
+Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-Ready nog aan dient te zetten in een (service)menu van de warmtepomp. 
 
 Voor de verbinding tussen de schakelmodules en de warmtepomp ingangen gebruik je bij voorkeur een stukje **UTP-kabel**.  
 SG-Ready werkt met een **spanningsloos (potentiaalvrij) contact** — de aders van een UTP-kabel zijn hiervoor ideaal.
