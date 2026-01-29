@@ -6,7 +6,7 @@ Nu duidelijk is waarom slimme sturing zinvol is en wat je daarvoor nodig hebt, v
 
 Elke warmtepomp met SG-Ready-ondersteuning heeft  **twee ingangen** (meestal aangeduid als **A** en **B**). Deze schakelsignalen bepalen samen de vier gedragsmodi. Afhankelijk van het merk kunnen deze ingangen verschillende namen hebben, zoals: A/B, SG-1 / SG-2, AUX 1 / AUX 2 etc. Check de handleiding waar deze twee ingangen zich bevinden op de warmtepomp. 
 
-De twee ingangen gaan geschakeld worden door de **twee Shelly-schakelmodules**. Zet voor de duidelijkheid op een module een A en op de andere module een B.
+De twee ingangen worden geschakeld door de **twee Shelly-schakelmodules**. Zet voor de duidelijkheid op een module een A en op de andere module een B.
 
 #### 1.1 Voeden van de schakelmodules (230 V)
 
@@ -23,7 +23,7 @@ Met lasklemmen kun je **L en N doorlussen** naar beide schakelmodules, zodat ze 
 #### 1.2 Verbinden van de schakelmodules met de SG-Ready-ingangen
 
 Maak de warmtepomp **spanningsloos** voordat je de SG-Ready-bedrading aansluit. 
-Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-Ready nog aan dient te zetten in het (service)menu van xde warmtepomp. 
+Check je handleiding waar in je warmtepomp beide ingangen zich bevinden en of je na het aansluiten SG-Ready nog aan dient te zetten in het (service)menu van de warmtepomp. 
 
 Voor de verbinding tussen de schakelmodules en de warmtepomp ingangen gebruik je bij voorkeur een stukje **UTP-kabel**.  
 SG-Ready werkt met een **spanningsloos (potentiaalvrij) contact** — de aders van een UTP-kabel zijn hiervoor ideaal.
@@ -46,7 +46,7 @@ Belangrijk:
 Wanneer alles is aangesloten:
 1. steek je de stekker in het stopcontact;
 2. zet je de warmtepomp weer onder spanning;
-3. zet je SG-Ready aan in het warmtepomp (service) menu (indien nodig). 
+3. zet je SG-Ready aan in het (service) menu van je warmtepomp (indien nodig). 
 
 Aansluitschema van twee Shelly schakelmodules met de SG-Ready ingangen op de warmtepomp:
 
@@ -78,13 +78,13 @@ De Green is volledig plug-and-play: aansluiten, opstarten en beginnen.
 
 Bij het afronden van stap 1 heb je beide schakelmodules van stroom voorzien, voeg ze toe aan HA:
 - Ga in HA naar instellingen – apparaten en diensten
-- HA ontdekt beide schakelmodules via bluetooth, ze verschijnen als: “Shelly1G4…”. Klik op toevoegen bij een van beide modules en klik op volgende op de Shelly te voorzien van je wifi instellingen. Je ziet dat het rode lichtje blijft branden (i.p.v. knipperen) zodra de module verbonden is met je wifi → check of je A of B op de module had gezet en geef vervolgens de module de juiste naam (SG-Ready-schakelmodule-A of SG-Ready-schakelmodule-B) en klik op voltooien.
-- Beide schakelmodules zijn nu beschikbaar als aan/uit schakelaar. Check hiervoor het menu: apparaten en diensten, klik op de Shelly integratie en check of beide schakelmodules zichtbaar zijn en of je ze aan(dicht) of uit (Open) kunt zetten. Laat ze voor nu beide op uit (Open) staan (=Normaal bedrijf warmtepomp).
+- HA ontdekt beide schakelmodules via Bluetooth, ze verschijnen als: “Shelly1G4…”. Klik op toevoegen bij een van beide modules en klik op volgende op de Shelly te voorzien van je wifi instellingen. Je ziet dat het rode lichtje blijft branden (i.p.v. knipperen) zodra de module verbonden is met je wifi → check of je A of B op de module had gezet en geef vervolgens de module de juiste naam (SG-Ready-schakelmodule-A of SG-Ready-schakelmodule-B) en klik op voltooien.
+- Beide schakelmodules zijn nu beschikbaar als aan/uit schakelaar. Check hiervoor het menu: apparaten en diensten, klik op de Shelly-integratie en check of beide schakelmodules zichtbaar zijn en of je ze aan(dicht) of uit (Open) kunt zetten. Laat ze voor nu beide op uit (Open) staan (=Normaal bedrijf warmtepomp).
 
 *Indien Home Assistant de schakelmodules niet automatisch ontdekt, kan het zijn dat de afstand tussen je HA Green en de modules te groot is voor Bluetooth. In dat geval kun je de modules toevoegen via de Shelly-app op je telefoon of ze tijdelijk dichter bij de HA Green van stroom voorzien.*
 
 ### Resultaat van stap 2
-Je kunt inloggen op een werkende HA-installatie en beide schakelmodules kun je AAN of UIT zetten in HA. 
+- Je kunt inloggen op een werkende HA-installatie en beide schakelmodules kun je AAN of UIT zetten in HA. 
 ___
 ## Stap 3 — Dynamische energieprijzen en prijsniveaus toevoegen
 
@@ -129,6 +129,8 @@ Bij **Optie A (de Tibber integratie)** worden deze prijsniveaus automatisch aang
 1. Ga naar **Instellingen → Apparaten & diensten → Integratie**
 2. Klik op de **Tibber Prijsinformatie & Beoordelingen** integratie
 3. Tussen de beschikbare sensoren staat een sensor: Uurprijsniveau en Kwartierprijsniveau (voor SG-Ready sturing gebruiken we de uurprijsniveaus)
+<img width="233" height="273" alt="uurprijsniveau" src="https://github.com/user-attachments/assets/955cdfab-6a60-4047-a6bf-368504bf9bfc" />
+
 
 Bij **Optie B (de ENTSO-E integratie)** dien je de prijsniveaus zelf te bepalen. De aanpak hiervoor is eenvoudig:
 > vergelijk elk uur de actuele prijs met het **daggemiddelde** en ken daar een niveau aan toe.
@@ -143,27 +145,29 @@ Bij **Optie B (de ENTSO-E integratie)** dien je de prijsniveaus zelf te bepalen.
 
 Je kunt uiteraard eigen drempelwaardes en niveaus kiezen, maar voor de leesbaarheid en consistentie hanteren we hier dezelfde indeling als Tibber.
 
-Om een prijsniveau sensor in HA beschikbaar te krijgen op basis van de ENTSO-E integratie: 
+Om een prijsniveausensor in HA beschikbaar te krijgen op basis van de ENTSO-E integratie: 
 1. Ga naar **Instellingen → Apparaten & diensten → Helpers**
-2. Klik **+ Helper aanmaken → Template → Template sensor**
-3. **Naam:** Energieprijs niveau
+2. Klik **+ Helper aanmaken → Template → Sensor**
+3. **Naam:** Energie uurprijsniveau
 4. Plak de code uit **State template** hieronder
 5. Controleer de preview
 6. Klik **Verzenden**
 
 **State template:**
 
-> ⚠️ Pas in onderstaande code indien nodig `sensor.average_electricity_price` aan naar jouw prijssensor  
-> Voorbeeld ENTSO-e: `sensor.average_electricity_price`
+> ⚠️ Pas in onderstaande code indien nodig `sensor.average_electricity_price` en `sensor.current_electricity_market_price` aan naar jouw sensor-ID's zoals die in de ENTSO-E integratie staan.   
+> sensor.average_electricity_price gebruiken we voor het attribuut prices_today (uurlijkse prijzen) om het daggemiddelde te berekenen.
+> De actuele prijs komt uit sensor.current_electricity_market_price.
 
 Kopieer deze code in het state template veld:
 
 ```jinja2
 {% set prices = state_attr('sensor.average_electricity_price', 'prices_today') %}
-{% if prices and prices | length > 0 %}
+{% set current_raw = states('sensor.current_electricity_market_price') %}
+{% set current = current_raw | float(none) %}
+{% if prices and prices | length > 0 and current is not none %}
   {% set price_values = prices | map(attribute='price') | list %}
   {% set avg = price_values | average %}
-  {% set current = states('sensor.average_electricity_price') | float(0) %}
   {% if avg > 0 %}
     {% set ratio = current / avg %}
     {% if ratio <= 0.6 %}
@@ -189,7 +193,7 @@ Kopieer deze code in het state template veld:
 
 - Home Assistant beschikt over **actuele uurprijzen**
 - Er is een sensor die **elk uur automatisch het prijsniveau bepaalt**
-- Deze prijsniveau sensor vormt de **input voor de SG-Ready-automatisering in stap 4**
+- Deze prijsniveausensor vormt de **input voor de SG-Ready-automatisering in stap 4**
 ___
 
 ## Stap 4 — SG-Ready automatisering op basis van prijs
@@ -226,7 +230,7 @@ Home Assistant stuurt dus **het gedrag**, niet de interne regeling.
 2. Klik **Automatisering toevoegen**
 3. Kies als **Wanneer** trigger:
    - Entiteit → Status (wanneer de status van een entiteit verandert
-   - Selecteer de prijsniveau sensor uit stap 3 (bijv. `sensor.energieprijs_niveau`)
+   - Selecteer de prijsniveausensor uit stap 3 (bijv. `sensor.energieprijs_niveau`)
 4. Kies vervolgens de acties met de **Als / Dan-logica**:
    - Als prijsniveau = Normaal → A uit, B uit
    - Als prijsniveau = Duur of Zeer duur → A aan, B uit
@@ -254,7 +258,7 @@ Controleer hier:
 
 - welke **SG-Ready-stand** actief is;
 - of **ingang A en B** correct worden gedetecteerd (open of dicht);
-- of het **gedrag van de warmtepomp** overeenkomt met het gekozen prijsniveau (je kunt de prijsniveau sensor handmatig even wijzigen om te testen).
+- of het **gedrag van de warmtepomp** overeenkomt met het gekozen prijsniveau (je kunt de prijsniveausensor handmatig even wijzigen om te testen).
 
 Als deze signalen zichtbaar zijn, weet je dat:
 
@@ -348,9 +352,9 @@ Deze sensor maak je als volgt aan
 	1.	Instellingen → Apparaten & diensten → Helpers
 	2.	+ Helper aanmaken → Template → Template sensor
 	3.	Vul in:
-	•	Naam: Overproductie actief
-	•	Eenheid: W
-	•	Device class: power
+	- Naam: Overproductie actief
+	- Eenheid: W
+	- Device class: power
 	4.	Plak onderstaande code in het State-veld
 	5.	Klik Verzenden
 
@@ -427,8 +431,7 @@ Breid de automatisering als volgt uit:
 - **Alleen als deze conditie niet waar is**:
   - voer de bestaande prijslogica uit (stap 4)
 - **Terugschakelen** gebeurt pas wanneer:
-  - de netto PV-overproductie gedurende een ingestelde periode
-    **onder de UIT-drempel blijft** (bijv. 5 minuten)
+  - de netto PV-overproductie gedurende een ingestelde periode **onder de UIT-drempel blijft** (bijv. 5 minuten)
   - *Door deze tijdsvertraging hebben korte dips — bijvoorbeeld door bewolking —
 geen effect op de SG-Ready-stand.*
 
